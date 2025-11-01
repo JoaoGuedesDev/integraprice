@@ -361,7 +361,7 @@ const AdvancedPricingForm: React.FC = () => {
                     <DollarSign className="h-6 w-6 text-primary mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground mb-1">Preço de Venda</p>
                     <p className="text-lg font-bold text-primary">
-                      R$ <AnimatedCounter end={results.sellingPrice} duration={1000} />
+                      R$ <AnimatedCounter value={results.sellingPrice} duration={1000} />
                     </p>
                   </div>
 
@@ -369,7 +369,7 @@ const AdvancedPricingForm: React.FC = () => {
                     <TrendingUp className="h-6 w-6 text-success mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground mb-1">Lucro Unitário</p>
                     <p className="text-lg font-bold text-success">
-                      R$ <AnimatedCounter end={results.profit} duration={1000} />
+                      R$ <AnimatedCounter value={results.profit} duration={1000} />
                     </p>
                   </div>
 
@@ -377,7 +377,7 @@ const AdvancedPricingForm: React.FC = () => {
                     <Target className="h-6 w-6 text-warning mx-auto mb-1" />
                     <p className="text-xs text-muted-foreground mb-1">Margem (%)</p>
                     <p className="text-lg font-bold text-warning">
-                      <AnimatedCounter end={results.marginPercentage} duration={1000} />%
+                      <AnimatedCounter value={results.marginPercentage} duration={1000} />%
                     </p>
                   </div>
 
@@ -385,7 +385,7 @@ const AdvancedPricingForm: React.FC = () => {
                     <BarChart3 className="h-6 w-6 text-purple-600 mx-auto mb-1" />
                     <p className="text-xs text-gray-600 mb-1">ROI (%)</p>
                     <p className="text-lg font-bold text-purple-600">
-                      <AnimatedCounter end={results.roi} duration={1000} />%
+                      <AnimatedCounter value={results.roi} duration={1000} />%
                     </p>
                   </div>
                 </div>

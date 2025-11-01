@@ -1,11 +1,11 @@
-import { BasicFormData, PricingResults } from '@/types';
+import { BasicFormData, BasicCalculationResult } from '@/types';
 
 /**
  * Calcula o preço de venda usando metodologia básica
  * @param data Dados do formulário básico
  * @returns Resultados da precificação
  */
-export function calculateBasicPrice(data: BasicFormData): PricingResults {
+export function calculateBasicPrice(data: BasicFormData): BasicCalculationResult {
   const { productCost, desiredMargin } = data;
   
   // Calcula o preço de venda baseado na margem desejada

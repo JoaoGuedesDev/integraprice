@@ -11,10 +11,10 @@ import { Badge } from '@/components/ui/badge';
 import { ThemeSelector } from '@/components/ui/ThemeSelector';
 import { PriceCompositionChart } from '@/components/charts/PriceCompositionChart';
 import { ExportDialog } from '@/components/ui/ExportDialog';
-import { PricingForm } from '@/components/forms/PricingForm';
+import PricingForm from '@/components/forms/PricingForm';
 import { EnhancedPricingForm } from '@/components/forms/EnhancedPricingForm';
 import BasicPricingForm from '@/components/forms/BasicPricingForm';
-import { AdvancedPricingForm } from '@/components/forms/AdvancedPricingForm';
+import AdvancedPricingForm from '@/components/forms/AdvancedPricingForm';
 import { ResultsDisplay } from '@/components/charts/ResultsDisplay';
 import { BasicResultsDisplay } from '@/components/charts/BasicResultsDisplay';
 import { RecommendationsCard } from '@/components/charts/RecommendationsCard';
@@ -446,7 +446,7 @@ export default function Home() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <BasicPricingForm onCalculate={handleBasicCalculate} isLoading={false} />
+                    <BasicPricingForm />
                   </CardContent>
                 </Card>
               </TabsContent>

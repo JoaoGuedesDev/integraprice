@@ -188,7 +188,7 @@ const BasicPricingForm: React.FC = () => {
                   <DollarSign className="h-8 w-8 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground mb-1">Preço de Venda</p>
                   <p className="text-2xl font-bold text-primary">
-                    R$ <AnimatedCounter end={results.sellingPrice} duration={1000} />
+                    R$ <AnimatedCounter value={results.sellingPrice} duration={1000} />
                   </p>
                 </div>
 
@@ -196,7 +196,7 @@ const BasicPricingForm: React.FC = () => {
                   <TrendingUp className="h-8 w-8 text-success mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground mb-1">Lucro por Unidade</p>
                   <p className="text-2xl font-bold text-success">
-                    R$ <AnimatedCounter end={results.profit} duration={1000} />
+                    R$ <AnimatedCounter value={results.profit} duration={1000} />
                   </p>
                 </div>
 
@@ -204,7 +204,7 @@ const BasicPricingForm: React.FC = () => {
                   <Badge variant="secondary" className="mb-2">Margem</Badge>
                   <p className="text-sm text-gray-600 mb-1">Margem de Lucro</p>
                   <p className="text-2xl font-bold text-amber-600">
-                    <AnimatedCounter end={results.marginPercentage} duration={1000} />%
+                    <AnimatedCounter value={results.marginPercentage} duration={1000} />%
                   </p>
                 </div>
               </div>

@@ -329,3 +329,19 @@ export interface AdvancedPricingInputs {
     otherDeductionsPercentage: number;
   };
 }
+
+// Tipos para formulário básico
+export interface BasicFormData {
+  productName: string;
+  productCost: number;
+  desiredMargin: number;
+  category?: string;
+}
+
+// Resultado dos cálculos básicos
+export interface BasicCalculationResult {
+  sellingPrice: number;
+  profit: number;
+  marginPercentage: number;
+  productCost: number;
+}

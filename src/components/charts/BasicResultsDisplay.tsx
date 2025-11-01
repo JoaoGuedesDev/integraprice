@@ -2,12 +2,12 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { PricingResults } from '@/types';
+import { BasicCalculationResult } from '@/types';
 import { DollarSign, TrendingUp, Target, BarChart3 } from 'lucide-react';
 import { AnimatedCounter } from '@/components/ui/animations';
 
 interface BasicResultsDisplayProps {
-  results: PricingResults;
+  results: BasicCalculationResult;
 }
 
 export function BasicResultsDisplay({ results }: BasicResultsDisplayProps) {
@@ -35,7 +35,7 @@ export function BasicResultsDisplay({ results }: BasicResultsDisplayProps) {
             <DollarSign className="h-8 w-8 text-primary mx-auto mb-2" />
             <p className="text-sm text-muted-foreground mb-1">Preço de Venda</p>
             <p className="text-2xl font-bold text-primary">
-              R$ <AnimatedCounter end={results.sellingPrice} duration={1000} />
+              R$ <AnimatedCounter value={results.sellingPrice} duration={1000} />
             </p>
           </div>
 
@@ -43,7 +43,7 @@ export function BasicResultsDisplay({ results }: BasicResultsDisplayProps) {
             <TrendingUp className="h-8 w-8 text-success mx-auto mb-2" />
             <p className="text-sm text-muted-foreground mb-1">Lucro por Unidade</p>
             <p className="text-2xl font-bold text-success">
-              R$ <AnimatedCounter end={results.profit} duration={1000} />
+              R$ <AnimatedCounter value={results.profit} duration={1000} />
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export function BasicResultsDisplay({ results }: BasicResultsDisplayProps) {
             <Target className="h-8 w-8 text-warning mx-auto mb-2" />
             <p className="text-sm text-muted-foreground mb-1">Margem de Lucro</p>
             <p className="text-2xl font-bold text-warning">
-              <AnimatedCounter end={results.marginPercentage} duration={1000} />%
+              <AnimatedCounter value={results.marginPercentage} duration={1000} />%
             </p>
           </div>
         </div>
