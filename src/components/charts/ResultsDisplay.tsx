@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { PricingInputs, PricingResults } from '@/types';
@@ -14,14 +14,17 @@ interface ResultsDisplayProps {
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
 const formatCurrency = (value: number) => {
-  return R$ ;
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value);
 };
 
 const formatPercentage = (value: number) => {
   return `${value.toFixed(2)}%`;
 };
 
-export default function ResultsDisplay({ inputs, results }: ResultsDisplayProps) {
+export function ResultsDisplay({ inputs, results }: ResultsDisplayProps) {
   const costBreakdown = [
     { name: 'Custos Fixos', value: results.totalFixedCosts, color: '#0088FE' },
     { name: 'Custos Variáveis', value: results.totalVariableCosts, color: '#00C49F' },
@@ -108,7 +111,11 @@ export default function ResultsDisplay({ inputs, results }: ResultsDisplayProps)
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                  label={({ name, value }: any) => {
+                    const total = costBreakdown.reduce((sum, item) => sum + item.value, 0);
+                    const percent = ((value / total) * 100).toFixed(1);
+                    return `${name}: ${percent}%`;
+                  }}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -175,7 +182,7 @@ export default function ResultsDisplay({ inputs, results }: ResultsDisplayProps)
               {inputs.variableCosts.map((cost, index) => (
                 <div key={index} className="flex justify-between">
                   <span className="text-sm">{cost.name}</span>
-                  <span className="text-sm font-medium">{formatCurrency(cost.value)}</span>
+                  <span className="text-sm font-medium">{formatCurrency(cost.valuePerUnit)}</span>
                 </div>
               ))}
             </div>
@@ -193,7 +200,7 @@ export default function ResultsDisplay({ inputs, results }: ResultsDisplayProps)
               {inputs.taxes.map((tax, index) => (
                 <div key={index} className="flex justify-between">
                   <span className="text-sm">{tax.name}</span>
-                  <span className="text-sm font-medium">{formatPercentage(tax.rate)}</span>
+                  <span className="text-sm font-medium">{formatPercentage(tax.percentage)}</span>
                 </div>
               ))}
             </div>

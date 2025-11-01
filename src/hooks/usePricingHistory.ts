@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { PricingHistory, PricingInputs, PricingResults, RiskAnalysis, StrategicRecommendation } from '@/types';
@@ -43,7 +43,8 @@ export function usePricingHistory() {
   ) => {
     const newEntry: PricingHistory = {
       id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
+      date: new Date(),
+      productName: inputs.productName,
       inputs,
       results,
       riskAnalysis,
@@ -79,7 +80,7 @@ export function usePricingHistory() {
     const dataStr = JSON.stringify(history, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
-    const exportFileDefaultName = integraprice_history_.json;
+    const exportFileDefaultName = 'integraprice_history.json';
     
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);

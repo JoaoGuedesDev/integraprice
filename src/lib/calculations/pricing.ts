@@ -1,4 +1,5 @@
-﻿import { PricingInputs, PricingResults, RiskAnalysis, RiskLevel, StrategicRecommendation } from '@/types';
+import { PricingInputs, PricingResults, RiskAnalysis, RiskLevel, StrategicRecommendation } from '@/types';
+import { calculateAdvancedTaxes } from './advancedTaxes';
 
 /**
  * Calcula o custo total dos custos fixos
@@ -77,17 +78,27 @@ export function calculatePricing(inputs: PricingInputs): PricingResults {
     // Cálculos básicos
     const totalFixedCosts = calculateTotalFixedCosts(inputs.fixedCosts);
     const variableCostPerUnit = calculateVariableCostPerUnit(inputs.variableCosts);
-    const totalTaxPercentage = calculateTotalTaxPercentage(inputs.taxes);
     const fixedCostPerUnit = calculateFixedCostPerUnit(totalFixedCosts, inputs.expectedVolume);
     const totalCostPerUnit = calculateTotalCostPerUnit(fixedCostPerUnit, variableCostPerUnit);
     
-    // Cálculos de preços
+    // Cálculo preliminar de preço sem impostos detalhados
+    const totalTaxPercentage = calculateTotalTaxPercentage(inputs.taxes);
     const minimumPrice = calculateMinimumPrice(totalCostPerUnit, totalTaxPercentage);
     const idealPrice = calculateIdealPrice(minimumPrice, inputs.desiredMargin);
     
+    // Cálculos avançados de impostos
+    const taxResults = calculateAdvancedTaxes(idealPrice, inputs.taxes, inputs.expectedVolume);
+    
+    // Ajustar preço final considerando impostos avançados
+    const finalPrice = taxResults.priceWithIncludedTaxes + taxResults.totalExcludedTaxes;
+    
     // Cálculos avançados
-    const breakEvenPoint = calculateBreakEvenPoint(totalFixedCosts, idealPrice, variableCostPerUnit);
-    const actualMargin = calculateActualMargin(idealPrice, minimumPrice);
+    const breakEvenPoint = calculateBreakEvenPoint(totalFixedCosts, finalPrice, variableCostPerUnit);
+    const actualMargin = calculateActualMargin(finalPrice, minimumPrice);
+    
+    // Margens mais precisas considerando impostos
+    const realMargin = ((finalPrice - totalCostPerUnit - taxResults.totalIncludedTaxes - taxResults.totalExcludedTaxes) / finalPrice) * 100;
+    const netMargin = realMargin * 0.85; // Estimativa de margem líquida
     
     return {
       unitCost: totalCostPerUnit,
@@ -96,9 +107,24 @@ export function calculatePricing(inputs: PricingInputs): PricingResults {
       totalCostPerUnit,
       minimumPrice,
       idealPrice,
+      finalPrice,
       breakEvenPoint,
       actualMargin,
+      realMargin,
+      netMargin,
       totalTaxes: totalTaxPercentage,
+      totalFixedCosts,
+      totalVariableCosts: variableCostPerUnit * inputs.expectedVolume,
+      totalRevenue: finalPrice * inputs.expectedVolume,
+      totalProfit: (finalPrice - totalCostPerUnit - taxResults.totalIncludedTaxes - taxResults.totalExcludedTaxes) * inputs.expectedVolume,
+      profit: (finalPrice - totalCostPerUnit - taxResults.totalIncludedTaxes - taxResults.totalExcludedTaxes) * inputs.expectedVolume,
+      // Informações detalhadas de impostos
+      taxCalculations: taxResults.taxCalculations,
+      totalIncludedTaxes: taxResults.totalIncludedTaxes,
+      totalExcludedTaxes: taxResults.totalExcludedTaxes,
+      priceWithoutTaxes: taxResults.priceWithoutTaxes,
+      priceWithIncludedTaxes: taxResults.priceWithIncludedTaxes,
+      effectiveTaxRate: taxResults.effectiveTaxRate,
     };
   } catch (error) {
     console.error('Erro nos cálculos de precificação:', error);

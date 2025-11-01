@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -133,7 +133,7 @@ const getImpactLabel = (impact: string) => {
   }
 };
 
-export default function RecommendationsCard({ recommendations }: RecommendationsCardProps) {
+export function RecommendationsCard({ recommendations }: RecommendationsCardProps) {
   // Agrupar recomendações por tipo
   const groupedRecommendations = recommendations.reduce((acc, rec) => {
     if (!acc[rec.type]) {
@@ -173,7 +173,7 @@ export default function RecommendationsCard({ recommendations }: Recommendations
                 <div key={type} className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <IconComponent className={`h-4 w-4 ${config.color}`} />
-                    <h3 className={ont-semibold }>{config.label}</h3>
+                    <h3 className="font-semibold">{config.label}</h3>
                   </div>
                   
                   <div className="space-y-4">

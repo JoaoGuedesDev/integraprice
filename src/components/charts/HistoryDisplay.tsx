@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,7 +89,7 @@ const getRiskColor = (level: string) => {
   }
 };
 
-export default function HistoryDisplay({ 
+export function HistoryDisplay({ 
   history, 
   onClearHistory, 
   onExportHistory, 
