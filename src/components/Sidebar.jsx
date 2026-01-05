@@ -3,6 +3,7 @@ import React from 'react';
 const Sidebar = ({ currentView, onChangeView }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'calculator', label: 'Calculadora', icon: '🧮' },
     { id: 'general', label: 'Dados Gerais', icon: '📋' },
     { id: 'settings', label: 'Configurações', icon: '⚙️' },
     { id: 'reports', label: 'Relatórios', icon: '📈' },

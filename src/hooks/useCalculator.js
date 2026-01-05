@@ -1,6 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { storageService } from '../services/storage';
 
 export const useCalculator = () => {
+  // Load initial state from storage or defaults
+  const initialCompanyData = storageService.loadCompanyData();
+  const initialProducts = storageService.loadProducts();
+
   // State for Product Info (Header)
   const [productInfo, setProductInfo] = useState({
     name: '',
@@ -8,7 +13,7 @@ export const useCalculator = () => {
   });
 
   // State for Company Info (Dados Gerais)
-  const [companyInfo, setCompanyInfo] = useState({
+  const [companyInfo, setCompanyInfo] = useState(initialCompanyData.companyInfo || {
     legalName: '',
     tradeName: '',
     cnpj: '',
@@ -26,10 +31,10 @@ export const useCalculator = () => {
   });
 
   // Saved Products State
-  const [savedProducts, setSavedProducts] = useState([]);
+  const [savedProducts, setSavedProducts] = useState(initialProducts || []);
 
   // State for Costs (Aba 1)
-  const [fixedCosts, setFixedCosts] = useState([
+  const [fixedCosts, setFixedCosts] = useState(initialCompanyData.fixedCosts || [
     { id: 1, name: 'Aluguel', value: 0 },
     { id: 2, name: 'Salários', value: 0 },
   ]);
@@ -41,10 +46,10 @@ export const useCalculator = () => {
 
   // State for Margin & Taxes (Aba 2)
   const [desiredMargin, setDesiredMargin] = useState(20); // %
-  const [taxes, setTaxes] = useState([
+  const [taxes, setTaxes] = useState(initialCompanyData.taxes || [
     { id: 1, name: 'Simples Nacional', value: 0 },
   ]);
-  const [salesFees, setSalesFees] = useState([
+  const [salesFees, setSalesFees] = useState(initialCompanyData.salesFees || [
     { id: 1, name: 'Taxa Cartão Crédito', value: 0 },
     { id: 2, name: 'Taxa Marketplace', value: 0 },
   ]);
@@ -53,6 +58,20 @@ export const useCalculator = () => {
 
   // State for Volume (Aba 3)
   const [volume, setVolume] = useState(100);
+
+  // Persistence Effects
+  useEffect(() => {
+    storageService.saveCompanyData({
+      companyInfo,
+      fixedCosts,
+      taxes,
+      salesFees
+    });
+  }, [companyInfo, fixedCosts, taxes, salesFees]);
+
+  useEffect(() => {
+    storageService.saveProducts(savedProducts);
+  }, [savedProducts]);
 
   // Helper to sum arrays
   const sumValues = (items) => items.reduce((acc, item) => acc + (parseFloat(item.value) || 0), 0);

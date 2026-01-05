@@ -8,14 +8,26 @@ import ResultPanel from './components/ResultPanel';
 import SettingsModal from './components/SettingsModal';
 import CompanyDataTab from './components/CompanyDataTab';
 import ReportsTab from './components/ReportsTab';
+import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import Register from './components/Register';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-function App() {
+function AppContent() {
+  const { user, loading } = useAuth();
   const { state, setters, actions, results } = useCalculator();
   const [currentView, setCurrentView] = useState('dashboard');
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // Kept for modal access if needed, but sidebar uses view switching
+  const [authView, setAuthView] = useState('login'); // 'login' or 'register'
+  
+  // Redirect to login if not authenticated
+  if (loading) return <div className="flex h-screen items-center justify-center">Carregando...</div>;
+  if (!user) {
+    if (authView === 'register') {
+      return <Register onSwitchToLogin={() => setAuthView('login')} />;
+    }
+    return <Login onSwitchToRegister={() => setAuthView('register')} />;
+  }
 
-  // If sidebar "Configurações" is clicked, we switch view to 'settings'
-  // If we want to open modal from inside Dashboard, we can use openSettings (optional)
   const openSettings = () => setCurrentView('settings');
 
   const renderContent = () => {
@@ -52,6 +64,16 @@ function App() {
           </div>
         );
       case 'dashboard':
+        return (
+          <div className="h-full p-8 bg-gray-50 overflow-y-auto">
+             <Dashboard 
+               savedProducts={state.savedProducts} 
+               openCalculator={() => setCurrentView('calculator')}
+               openReports={() => setCurrentView('reports')}
+             />
+          </div>
+        );
+      case 'calculator':
       default:
         return (
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -150,21 +172,39 @@ function App() {
       
       <main className="flex-1 p-8 overflow-y-auto h-screen">
         {/* Header Title based on view */}
-        <header className="mb-8">
-           <h1 className="text-3xl font-bold text-gray-900">
-             {currentView === 'dashboard' ? 'Calculadora de Precificação' : 
-              currentView === 'settings' ? '' : // Settings has its own header
-              currentView === 'general' ? 'Dados Gerais' :
-              'Relatórios'}
-           </h1>
-           {currentView === 'dashboard' && (
-             <p className="text-gray-600 mt-2">Defina os custos variáveis e volume para precificar seu produto.</p>
-           )}
+        <header className="mb-8 flex justify-between items-center">
+           <div>
+             <h1 className="text-3xl font-bold text-gray-900">
+               {currentView === 'calculator' ? 'Nova Precificação' : 
+                currentView === 'settings' ? '' : 
+                currentView === 'general' ? 'Dados Gerais' :
+                currentView === 'dashboard' ? 'Dashboard' :
+                'Relatórios'}
+             </h1>
+             {currentView === 'calculator' && (
+               <p className="text-gray-600 mt-2">Defina os custos variáveis e volume para precificar seu produto.</p>
+             )}
+           </div>
+           
+           <div className="flex items-center gap-3">
+             <span className="text-sm font-medium text-gray-600">Olá, {user.name}</span>
+             <div className="h-8 w-8 rounded-full bg-blue-200 overflow-hidden">
+                <img src={user.avatar} alt="User" className="h-full w-full object-cover" />
+             </div>
+           </div>
         </header>
 
         {renderContent()}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
